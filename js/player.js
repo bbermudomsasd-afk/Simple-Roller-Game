@@ -13,6 +13,7 @@ var Player = {
   vx: 0,           // speed left and right
   vy: 0,           // speed up and down
   onGround: false, // is the player standing on something right now?
+  jumpsLeft: 0,    // extra mid-air jumps remaining
   angle: 0         // how far the circle has rolled, for drawing the dot
 };
 
@@ -23,6 +24,7 @@ Player.reset = function () {
   Player.vx = 0;
   Player.vy = 0;
   Player.onGround = false;
+  Player.jumpsLeft = CONFIG.MAX_JUMPS - 1;
   Player.angle = 0;
 };
 
@@ -35,10 +37,17 @@ Player.update = function () {
   if (Input.left)  { Player.vx = -CONFIG.MOVE_SPEED; }
   if (Input.right) { Player.vx =  CONFIG.MOVE_SPEED; }
 
-  // --- 2. jump, but only if we are standing on something --------------
-  if (Input.jump && Player.onGround) {
-    Player.vy = -CONFIG.JUMP_POWER;   // negative is UP
-    Player.onGround = false;
+  // --- 2. jump from the ground, then once again in mid-air -------------
+  if (Input.jumpPressed) {
+    if (Player.onGround) {
+      Player.vy = -CONFIG.JUMP_POWER;
+      Player.onGround = false;
+      Player.jumpsLeft = CONFIG.MAX_JUMPS - 1;
+    } else if (Player.jumpsLeft > 0) {
+      Player.vy = -CONFIG.JUMP_POWER;
+      Player.jumpsLeft = Player.jumpsLeft - 1;
+    }
+    Input.jumpPressed = false;
   }
 
   // --- 3. gravity pulls down every single frame -----------------------
@@ -66,6 +75,7 @@ Player.update = function () {
   for (var j = 0; j < Math.abs(Player.vy); j++) {
     if (Collide.hitsSolid(Player.x, Player.y + stepY, size, size)) {
       if (stepY > 0) { Player.onGround = true; }  // we landed on something
+      if (stepY > 0) { Player.jumpsLeft = CONFIG.MAX_JUMPS - 1; }
       Player.vy = 0;
       break;
     }

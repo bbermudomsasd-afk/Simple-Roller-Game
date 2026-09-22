@@ -10,6 +10,7 @@ var Input = {
   left: false,
   right: false,
   jump: false,
+  jumpPressed: false,
   restart: false
 };
 
@@ -32,6 +33,9 @@ window.addEventListener("keyup", function (event) {
 function setKey(key, isDown) {
   if (key === "ArrowLeft"  || key === "a" || key === "A") { Input.left  = isDown; }
   if (key === "ArrowRight" || key === "d" || key === "D") { Input.right = isDown; }
-  if (key === "ArrowUp"    || key === " " || key === "w" || key === "W") { Input.jump = isDown; }
+  if (key === "ArrowUp"    || key === " " || key === "w" || key === "W") {
+    if (isDown && !Input.jump) { Input.jumpPressed = true; }
+    Input.jump = isDown;
+  }
   if (key === "r" || key === "R") { Input.restart = isDown; }
 }

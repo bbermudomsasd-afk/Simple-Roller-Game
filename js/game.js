@@ -18,8 +18,9 @@ Game.startLevel = function (levelNumber) {
   Game.levelNumber = levelNumber;
   Level.build(levelNumber);
   Player.reset();
+  Input.jumpPressed = false;
   Game.mode = "playing";
-  Game.showMessage("");
+  Game.showMessage("Level " + (levelNumber + 1) + ": " + Level.name);
 };
 
 Game.showMessage = function (text) {
@@ -35,7 +36,18 @@ Game.update = function () {
     return;
   }
 
-  // If we are not playing, nothing moves. We just wait for R.
+  // A jump press moves to the next level after a win.
+  if (Game.mode === "won" && Input.jumpPressed) {
+    if (Game.levelNumber + 1 < Level.levels.length) {
+      Game.startLevel(Game.levelNumber + 1);
+    } else {
+      Input.jumpPressed = false;
+      Game.showMessage("You cleared every level. Press R to play again.");
+    }
+    return;
+  }
+
+  // If we are not playing, nothing moves. We just wait for R or SPACE.
   if (Game.mode !== "playing") { return; }
 
   Player.update();
@@ -48,7 +60,11 @@ Game.update = function () {
 
   if (Player.hasWon()) {
     Game.mode = "won";
-    Game.showMessage("You made it. Press R to play again.");
+    if (Game.levelNumber + 1 < Level.levels.length) {
+      Game.showMessage("Level clear. Press SPACE to continue.");
+    } else {
+      Game.showMessage("Final level clear. Press R to play again.");
+    }
     return;
   }
 };

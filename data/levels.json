@@ -28,6 +28,36 @@
         "flat",
         "finish"
       ]
+    },
+    {
+      "name": "Level 3 - Double Jump",
+      "pieces": [
+        "start",
+        "gap",
+        "spikes",
+        "gap",
+        "platform",
+        "spikepit",
+        "stairs",
+        "gap",
+        "finish"
+      ]
+    },
+    {
+      "name": "Level 4 - Prussian Gauntlet",
+      "pieces": [
+        "start",
+        "spikes",
+        "gap",
+        "step",
+        "spikepit",
+        "gap",
+        "stairs",
+        "spikes",
+        "platform",
+        "gap",
+        "finish"
+      ]
     }
   ]
 }

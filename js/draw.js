@@ -34,9 +34,21 @@ Draw.updateCamera = function () {
 Draw.everything = function () {
   var ctx = Draw.ctx;
 
-  // 1. wipe the screen white
-  ctx.fillStyle = "#ffffff";
+  // 1. paint the warm sky behind the level
+  var sky = ctx.createLinearGradient(0, 0, 0, CONFIG.CANVAS_H);
+  sky.addColorStop(0, "#f6f1e8");
+  sky.addColorStop(1, "#d9e2ec");
+  ctx.fillStyle = sky;
   ctx.fillRect(0, 0, CONFIG.CANVAS_W, CONFIG.CANVAS_H);
+
+  ctx.strokeStyle = "rgba(16, 42, 67, 0.08)";
+  ctx.lineWidth = 1;
+  for (var gridX = 0; gridX < CONFIG.CANVAS_W; gridX += CONFIG.TILE) {
+    ctx.beginPath();
+    ctx.moveTo(gridX, 0);
+    ctx.lineTo(gridX, CONFIG.CANVAS_H);
+    ctx.stroke();
+  }
 
   // 2. shift everything left so the camera looks like it moved right
   ctx.save();
@@ -70,12 +82,12 @@ Draw.world = function () {
   }
 };
 
-// A solid block: white inside, black outline.
+// A solid block in the game's Prussian navy and brass palette.
 Draw.block = function (x, y, size) {
   var ctx = Draw.ctx;
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "#102a43";
   ctx.fillRect(x, y, size, size);
-  ctx.strokeStyle = "#000000";
+  ctx.strokeStyle = "#f2c14e";
   ctx.lineWidth = CONFIG.LINE_WIDTH;
   ctx.strokeRect(x + CONFIG.LINE_WIDTH / 2,
                  y + CONFIG.LINE_WIDTH / 2,
@@ -83,10 +95,10 @@ Draw.block = function (x, y, size) {
                  size - CONFIG.LINE_WIDTH);
 };
 
-// A spike: a solid black triangle pointing up.
+// A spike: a crimson warning triangle pointing up.
 Draw.spike = function (x, y, size) {
   var ctx = Draw.ctx;
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = "#b23a48";
   ctx.beginPath();
   ctx.moveTo(x, y + size);
   ctx.lineTo(x + size / 2, y);
@@ -95,16 +107,17 @@ Draw.spike = function (x, y, size) {
   ctx.fill();
 };
 
-// The finish: a black pole with a flag on it.
+// The finish: a navy pole with a brass flag.
 Draw.finish = function (x, y, size) {
   var ctx = Draw.ctx;
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = "#102a43";
   ctx.fillRect(x + size / 2 - 2, y, 4, size);
   ctx.beginPath();
   ctx.moveTo(x + size / 2 + 2, y + 4);
   ctx.lineTo(x + size - 4,     y + 12);
   ctx.lineTo(x + size / 2 + 2, y + 20);
   ctx.closePath();
+  ctx.fillStyle = "#f2c14e";
   ctx.fill();
 };
 
@@ -117,8 +130,8 @@ Draw.player = function () {
   var centerY = Player.y + CONFIG.PLAYER_SIZE / 2;
 
   // the circle
-  ctx.fillStyle = "#ffffff";
-  ctx.strokeStyle = "#000000";
+  ctx.fillStyle = "#f2c14e";
+  ctx.strokeStyle = "#102a43";
   ctx.lineWidth = CONFIG.LINE_WIDTH;
   ctx.beginPath();
   ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
@@ -129,7 +142,7 @@ Draw.player = function () {
   var dotX = centerX + Math.cos(Player.angle) * r * CONFIG.DOT_DISTANCE;
   var dotY = centerY + Math.sin(Player.angle) * r * CONFIG.DOT_DISTANCE;
 
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = "#102a43";
   ctx.beginPath();
   ctx.arc(dotX, dotY, 4, 0, Math.PI * 2);
   ctx.fill();
