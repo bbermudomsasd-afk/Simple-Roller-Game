@@ -12,12 +12,18 @@
 var Draw = {
   canvas: null,
   ctx: null,
+  checkpointImage: null,
+  playerImage: null,
   cameraX: 0     // how far the view has scrolled to the right
 };
 
 Draw.setup = function () {
   Draw.canvas = document.getElementById("game");
   Draw.ctx = Draw.canvas.getContext("2d");
+  Draw.checkpointImage = new Image();
+  Draw.checkpointImage.src = "Prussia_Chibi_2011_transparent.webp";
+  Draw.playerImage = new Image();
+  Draw.playerImage.src = "Gil (1).webp";
 };
 
 // Follow the player, but never scroll past the ends of the level.
@@ -107,9 +113,20 @@ Draw.spike = function (x, y, size) {
   ctx.fill();
 };
 
-// The finish: a navy pole with a brass flag.
+// The finish: a Prussia image used as the checkpoint marker.
 Draw.finish = function (x, y, size) {
   var ctx = Draw.ctx;
+  var imageSize = size * 2;
+
+  if (Draw.checkpointImage.complete && Draw.checkpointImage.naturalWidth > 0) {
+    ctx.drawImage(Draw.checkpointImage,
+                  x + (size - imageSize) / 2,
+                  y + size - imageSize,
+                  imageSize,
+                  imageSize);
+    return;
+  }
+
   ctx.fillStyle = "#102a43";
   ctx.fillRect(x + size / 2 - 2, y, 4, size);
   ctx.beginPath();
@@ -121,15 +138,32 @@ Draw.finish = function (x, y, size) {
   ctx.fill();
 };
 
-// The player: a white circle with a black outline and one off-center
-// black dot, so you can see it roll.
+// The player: Gil cropped into the rolling ball.
 Draw.player = function () {
   var ctx = Draw.ctx;
   var r = CONFIG.PLAYER_RADIUS;
   var centerX = Player.x + CONFIG.PLAYER_SIZE / 2;
   var centerY = Player.y + CONFIG.PLAYER_SIZE / 2;
 
-  // the circle
+  if (Draw.playerImage.complete && Draw.playerImage.naturalWidth > 0) {
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(Player.angle);
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(Draw.playerImage, -r, -r, r * 2, r * 2);
+    ctx.restore();
+
+    ctx.strokeStyle = "#102a43";
+    ctx.lineWidth = CONFIG.LINE_WIDTH;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
+    ctx.stroke();
+    return;
+  }
+
+  // Show the original ball while the image loads.
   ctx.fillStyle = "#f2c14e";
   ctx.strokeStyle = "#102a43";
   ctx.lineWidth = CONFIG.LINE_WIDTH;
