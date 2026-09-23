@@ -8,10 +8,11 @@
         "start",
         "flat",
         "gap",
-        "flat",
         "spikes",
+        "gap",
         "platform",
         "stairs",
+        "spikes",
         "finish"
       ]
     },
@@ -23,8 +24,10 @@
         "gap",
         "step",
         "spikepit",
+        "spikes",
         "platform",
         "gap",
+        "spikepit",
         "flat",
         "finish"
       ]
@@ -38,8 +41,10 @@
         "gap",
         "platform",
         "spikepit",
+        "spikes",
         "stairs",
         "gap",
+        "spikepit",
         "finish"
       ]
     },
@@ -54,8 +59,10 @@
         "gap",
         "stairs",
         "spikes",
+        "spikepit",
         "platform",
         "gap",
+        "spikes",
         "finish"
       ]
     }

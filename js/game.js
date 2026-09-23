@@ -54,7 +54,12 @@ Game.update = function () {
 
   if (Player.isDead()) {
     Game.mode = "dead";
-    Game.showMessage("You hit something. Press R to try again.");
+    if (Collide.hitsSpike(Player.x, Player.y,
+                          CONFIG.PLAYER_SIZE, CONFIG.PLAYER_SIZE)) {
+      Game.showMessage("Oh no! Russia hit you with his magic metal pipe of pain!");
+    } else {
+      Game.showMessage("You hit something. Press R to try again.");
+    }
     return;
   }
 
