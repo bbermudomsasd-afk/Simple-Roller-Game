@@ -14,6 +14,7 @@ var Draw = {
   ctx: null,
   checkpointImage: null,
   playerImage: null,
+  spikeImage: null,
   cameraX: 0     // how far the view has scrolled to the right
 };
 
@@ -24,6 +25,8 @@ Draw.setup = function () {
   Draw.checkpointImage.src = "Prussia_Chibi_2011_transparent.webp";
   Draw.playerImage = new Image();
   Draw.playerImage.src = "Gil (1).webp";
+  Draw.spikeImage = new Image();
+  Draw.spikeImage.src = "dahpgxo-0dde6f85-a949-41cd-896f-af5813b8a51a.png";
 };
 
 // Follow the player, but never scroll past the ends of the level.
@@ -104,6 +107,12 @@ Draw.block = function (x, y, size) {
 // A spike: a crimson warning triangle pointing up.
 Draw.spike = function (x, y, size) {
   var ctx = Draw.ctx;
+
+  if (Draw.spikeImage.complete && Draw.spikeImage.naturalWidth > 0) {
+    ctx.drawImage(Draw.spikeImage, x, y, size, size);
+    return;
+  }
+
   ctx.fillStyle = "#b23a48";
   ctx.beginPath();
   ctx.moveTo(x, y + size);
