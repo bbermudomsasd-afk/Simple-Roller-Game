@@ -15,6 +15,7 @@ var Draw = {
   checkpointImage: null,
   playerImage: null,
   spikeImage: null,
+  netherlandsImage: null,
   cameraX: 0     // how far the view has scrolled to the right
 };
 
@@ -27,6 +28,8 @@ Draw.setup = function () {
   Draw.playerImage.src = "Gil (1).webp";
   Draw.spikeImage = new Image();
   Draw.spikeImage.src = "dahpgxo-0dde6f85-a949-41cd-896f-af5813b8a51a.png";
+  Draw.netherlandsImage = new Image();
+  Draw.netherlandsImage.src = "Netherlands_Chibi_2011.webp";
 };
 
 // Follow the player, but never scroll past the ends of the level.
@@ -133,18 +136,34 @@ Draw.finish = function (x, y, size) {
                   y + size - imageSize,
                   imageSize,
                   imageSize);
-    return;
+  } else {
+    ctx.fillStyle = "#102a43";
+    ctx.fillRect(x + size / 2 - 2, y, 4, size);
+    ctx.beginPath();
+    ctx.moveTo(x + size / 2 + 2, y + 4);
+    ctx.lineTo(x + size - 4,     y + 12);
+    ctx.lineTo(x + size / 2 + 2, y + 20);
+    ctx.closePath();
+    ctx.fillStyle = "#f2c14e";
+    ctx.fill();
   }
 
-  ctx.fillStyle = "#102a43";
-  ctx.fillRect(x + size / 2 - 2, y, 4, size);
-  ctx.beginPath();
-  ctx.moveTo(x + size / 2 + 2, y + 4);
-  ctx.lineTo(x + size - 4,     y + 12);
-  ctx.lineTo(x + size / 2 + 2, y + 20);
-  ctx.closePath();
-  ctx.fillStyle = "#f2c14e";
-  ctx.fill();
+  var isTopFinishTile = Level.charAt(x / size, y / size - 1) !== "F";
+  if (isTopFinishTile &&
+      Draw.netherlandsImage.complete && Draw.netherlandsImage.naturalWidth > 0) {
+    var netherlandsSize = size * 1.25;
+    var hop = 0;
+    if (Game.checkpointHopStart !== null) {
+      var elapsed = performance.now() - Game.checkpointHopStart;
+      var progress = Math.min(elapsed / 900, 1);
+      hop = Math.sin(progress * Math.PI) * size * 1.5;
+    }
+    ctx.drawImage(Draw.netherlandsImage,
+                  x + size,
+                  y + size - netherlandsSize - hop,
+                  netherlandsSize,
+                  netherlandsSize);
+  }
 };
 
 // The player: Gil cropped into the rolling ball.

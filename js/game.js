@@ -11,7 +11,8 @@
 
 var Game = {
   mode: "playing",   // "playing", "dead", or "won"
-  levelNumber: 0
+  levelNumber: 0,
+  checkpointHopStart: null
 };
 
 Game.startLevel = function (levelNumber) {
@@ -20,6 +21,7 @@ Game.startLevel = function (levelNumber) {
   Player.reset();
   Input.jumpPressed = false;
   Game.mode = "playing";
+  Game.checkpointHopStart = null;
   Game.showMessage("Level " + (levelNumber + 1) + ": " + Level.name);
 };
 
@@ -65,6 +67,7 @@ Game.update = function () {
 
   if (Player.hasWon()) {
     Game.mode = "won";
+    Game.checkpointHopStart = performance.now();
     if (Game.levelNumber + 1 < Level.levels.length) {
       Game.showMessage("Level clear. Press SPACE to continue.");
     } else {
