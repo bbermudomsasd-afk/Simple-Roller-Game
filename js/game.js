@@ -34,7 +34,11 @@ Game.update = function () {
 
   // R always restarts, no matter what mode we are in.
   if (Input.restart) {
-    Game.startLevel(Game.levelNumber);
+    var restartLevel = Game.levelNumber;
+    if (Game.mode === "won" && Game.levelNumber === Level.levels.length - 1) {
+      restartLevel = CONFIG.START_LEVEL;
+    }
+    Game.startLevel(restartLevel);
     return;
   }
 
