@@ -1,8 +1,8 @@
 # ROLLER - the base game
 
-A circle with an off-center dot rolls through a black and white world.
-It can move, jump, land on platforms, and die on spikes. It wins by
-touching the flag.
+A circle with an off-center dot jumps across floating block platforms,
+gaps, and spikes. There is no base floor, so falling into the void is
+deadly. Reaching each finish marker advances to the next level.
 
 That is the whole game. Everything else is yours to add.
 
@@ -46,11 +46,11 @@ Each picture is 8 columns wide and 10 rows tall:
       "........",
       "........",
       "........",
-      "........",
-      "........",
-      "........",
-      "###..###",
-      "###..###"
+      "#.......",
+      "....##..",
+      "##......",
+      ".......#",
+      "........"
     ]
 
 - `.` is empty air
