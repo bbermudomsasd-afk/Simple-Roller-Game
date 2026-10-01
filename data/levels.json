@@ -3,7 +3,7 @@
 
   "levels": [
     {
-      "name": "Level 1 - Warm Up",
+      "name": " ",
       "pieces": [
         "start",
         "flat",
@@ -17,7 +17,7 @@
       ]
     },
     {
-      "name": "Level 2 - Watch Your Step",
+      "name": " ",
       "pieces": [
         "start",
         "spikes",
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "name": "Level 3 - Double Jump",
+      "name": "   ",
       "pieces": [
         "start",
         "gap",
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "name": "Level 4 - Prussian Gauntlet",
+      "name": " ",
       "pieces": [
         "start",
         "spikes",
