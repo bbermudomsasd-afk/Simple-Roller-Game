@@ -18,7 +18,7 @@ var CONFIG = {
   CANVAS_H: 400,
 
   // --- how the player moves -------------------------------------------
-  MOVE_SPEED: 4,      // pixels per frame left and right
+  MOVE_SPEED: 5,      // pixels per frame left and right
   JUMP_POWER: 15,     // how hard the jump pushes UP. bigger = higher
   MAX_JUMPS: 2,       // ground jump plus one mid-air jump
   GRAVITY: 0.8,       // how hard the world pulls DOWN. bigger = heavier
