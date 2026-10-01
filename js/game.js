@@ -57,6 +57,7 @@ Game.update = function () {
   if (Game.mode !== "playing") { return; }
 
   Player.update();
+  Level.update();
 
   if (Player.isDead()) {
     Game.mode = "dead";

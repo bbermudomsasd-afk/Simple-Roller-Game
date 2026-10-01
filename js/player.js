@@ -28,6 +28,17 @@ Player.reset = function () {
   Player.angle = 0;
 };
 
+Player.triggerCrumble = function () {
+  var size = CONFIG.PLAYER_SIZE;
+  var squares = Collide.squaresUnder(Player.x, Player.y, size, size);
+  for (var i = 0; i < squares.length; i++) {
+    var square = squares[i];
+    if (Level.charAt(square.col, square.row) === "C") {
+      Level.triggerCrumble(square.col, square.row);
+    }
+  }
+};
+
 // Run one frame of player movement.
 Player.update = function () {
   var size = CONFIG.PLAYER_SIZE;
@@ -80,6 +91,11 @@ Player.update = function () {
       break;
     }
     Player.y = Player.y + stepY;
+  }
+
+  // crumbling blocks collapse when the player touches them.
+  if (Player.vy >= 0) {
+    Player.triggerCrumble();
   }
 
   // --- 6. keep the player inside the left edge of the world -----------

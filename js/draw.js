@@ -88,6 +88,7 @@ Draw.world = function () {
       var y = row * size;
 
       if (here === "#") { Draw.block(x, y, size); }
+      if (here === "C") { Draw.crumblingBlock(x, y, size); }
       if (here === "^") { Draw.spike(x, y, size); }
       if (here === "F") { Draw.finish(x, y, size); }
     }
@@ -105,6 +106,29 @@ Draw.block = function (x, y, size) {
                  y + CONFIG.LINE_WIDTH / 2,
                  size - CONFIG.LINE_WIDTH,
                  size - CONFIG.LINE_WIDTH);
+};
+
+Draw.crumblingBlock = function (x, y, size) {
+  var ctx = Draw.ctx;
+  var key = Math.floor(x / size) + ":" + Math.floor(y / size);
+  var timer = Level.crumbling[key] || 10;
+  var alpha = Math.max(0.35, timer / 10);
+
+  ctx.fillStyle = "rgba(17, 54, 84, " + alpha + ")";
+  ctx.fillRect(x, y, size, size);
+  ctx.strokeStyle = "rgba(242, 193, 78, " + alpha + ")";
+  ctx.lineWidth = CONFIG.LINE_WIDTH;
+  ctx.strokeRect(x + CONFIG.LINE_WIDTH / 2,
+                 y + CONFIG.LINE_WIDTH / 2,
+                 size - CONFIG.LINE_WIDTH,
+                 size - CONFIG.LINE_WIDTH);
+
+  ctx.strokeStyle = "rgba(255, 255, 255, " + (alpha * 0.7) + ")";
+  ctx.beginPath();
+  ctx.moveTo(x + size * 0.25, y + size * 0.72);
+  ctx.lineTo(x + size * 0.45, y + size * 0.3);
+  ctx.lineTo(x + size * 0.72, y + size * 0.68);
+  ctx.stroke();
 };
 
 // A spike: a crimson warning triangle pointing up.

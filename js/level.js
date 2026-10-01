@@ -16,7 +16,8 @@ var Level = {
   cols: 0,          // how many columns wide the finished world is
   name: "",
   startX: 0,        // where the player begins, in pixels
-  startY: 0
+  startY: 0,
+  crumbling: {}     // tracks blocks that are collapsing, keyed by "col:row"
 };
 
 // --- STEP 1: read the two data files ----------------------------------
@@ -45,6 +46,7 @@ Level.build = function (levelNumber) {
   Level.name = level.name;
   Level.grid = [];
   Level.cols = level.pieces.length * CONFIG.PIECE_COLS;
+  Level.crumbling = {};
 
   // start with 10 empty rows
   for (var row = 0; row < CONFIG.ROWS; row++) {
@@ -85,6 +87,35 @@ Level.findStart = function () {
   Level.startY = 0;
 };
 
+// --- CRUMBLING BLOCK LOGIC ---------------------------------------------
+Level.triggerCrumble = function (col, row) {
+  var tile = Level.charAt(col, row);
+  if (tile !== "C") { return; }
+
+  var key = col + ":" + row;
+  if (Level.crumbling[key]) { return; }
+
+  Level.crumbling[key] = 10;  // about 0.17 seconds at 60fps
+};
+
+Level.update = function () {
+  var keys = Object.keys(Level.crumbling);
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var parts = key.split(":");
+    var col = Number(parts[0]);
+    var row = Number(parts[1]);
+
+    Level.crumbling[key] = Level.crumbling[key] - 1;
+    if (Level.crumbling[key] <= 0) {
+      var chars = Level.grid[row].split("");
+      chars[col] = ".";
+      Level.grid[row] = chars.join("");
+      delete Level.crumbling[key];
+    }
+  }
+};
+
 // --- ASKING THE WORLD QUESTIONS ---------------------------------------
 // What character is at this grid square?
 Level.charAt = function (col, row) {
@@ -93,7 +124,10 @@ Level.charAt = function (col, row) {
   return Level.grid[row].charAt(col);
 };
 
-Level.isSolid  = function (col, row) { return Level.charAt(col, row) === "#"; };
+Level.isSolid  = function (col, row) {
+  var tile = Level.charAt(col, row);
+  return tile === "#" || tile === "C";
+};
 Level.isSpike  = function (col, row) { return Level.charAt(col, row) === "^"; };
 Level.isFinish = function (col, row) { return Level.charAt(col, row) === "F"; };
 
